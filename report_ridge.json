@@ -1,0 +1,18 @@
+{
+  "best_alpha": 10.0,
+  "train": {
+    "mae": 0.10718168165261398,
+    "rmse": 0.16055391605736385,
+    "directional_accuracy": 0.6251695145104421
+  },
+  "validation": {
+    "mae": 0.08956077201007222,
+    "rmse": 0.14430032896845962,
+    "directional_accuracy": 0.580029368575624
+  },
+  "baseline": {
+    "mae": 0.08522488921880722,
+    "rmse": 0.15210658311843872,
+    "directional_accuracy": 0.0
+  }
+}
