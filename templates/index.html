@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="{{ refresh_seconds }}">
+  <title>EUR/USD Forecast Dashboard</title>
+  <style>
+    body { background: #0b0f14; color: #e8ecef; font-family: Arial, sans-serif; margin: 0; padding: 24px; }
+    .page { max-width: 1000px; margin: 0 auto; }
+    h1 { font-size: 22px; margin: 0 0 4px 0; }
+    .muted { color: #8a96a3; font-size: 13px; }
+    .tabs { margin: 20px 0; }
+    .tab { display: inline-block; padding: 8px 16px; margin-right: 6px; border: 1px solid #2a3440;
+           border-radius: 6px; color: #8a96a3; text-decoration: none; text-transform: uppercase; font-size: 13px; }
+    .tab.active { border-color: #4fa8e0; color: #4fa8e0; }
+    .tab.disabled { opacity: 0.4; }
+    .signal { font-size: 40px; font-weight: bold; margin: 10px 0; }
+    .up { color: #3ddc84; }
+    .down { color: #ff5c5c; }
+    .stats { display: flex; gap: 12px; margin: 16px 0; flex-wrap: wrap; }
+    .stat { background: #12181f; border: 1px solid #1e2630; border-radius: 8px; padding: 12px 16px; flex: 1; min-width: 140px; }
+    .stat-label { color: #8a96a3; font-size: 12px; text-transform: uppercase; }
+    .stat-value { font-size: 20px; margin-top: 4px; }
+    .chart { background: #12181f; border: 1px solid #1e2630; border-radius: 8px; margin-bottom: 14px; padding: 6px; }
+    .message { background: #1a2430; border: 1px solid #4fa8e0; border-radius: 6px; padding: 10px; margin: 12px 0; }
+    .error { background: #2a1515; border: 1px solid #ff5c5c; border-radius: 6px; padding: 10px; margin: 12px 0; }
+    button { background: #161d26; color: #e8ecef; border: 1px solid #2a3440; border-radius: 6px; padding: 8px 16px; cursor: pointer; }
+    button:hover { border-color: #4fa8e0; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <h1>EUR/USD Forecast Dashboard</h1>
+  <div class="muted">LSTM vs XGBoost vs Ridge &middot; 15-minute candles &middot; data from Yahoo Finance</div>
+ 
+  {% for message in get_flashed_messages() %}
+    <div class="message">{{ message }}</div>
+  {% endfor %}
+ 
+  {% if error %}
+    <div class="error">Last update failed: {{ error }}</div>
+  {% endif %}
+ 
+  <div class="tabs">
+    {% for name in model_names %}
+      {% if name in available %}
+        <a class="tab {% if name == selected %}active{% endif %}" href="/?model={{ name }}">{{ name }}</a>
+      {% else %}
+        <span class="tab disabled">{{ name }} (not trained)</span>
+      {% endif %}
+    {% endfor %}
+  </div>
+ 
+  {% if selected %}
+    <div class="muted">Next 15-minute bar &middot; {{ selected | upper }}</div>
+    {% if going_up %}
+      <div class="signal up">&#9650; UP <span class="muted">{{ change }}</span></div>
+    {% else %}
+      <div class="signal down">&#9660; DOWN <span class="muted">{{ change }}</span></div>
+    {% endif %}
+ 
+    <div class="stats">
+      <div class="stat"><div class="stat-label">Backtest MAE</div><div class="stat-value">{{ mae }}</div></div>
+      <div class="stat"><div class="stat-label">Backtest RMSE</div><div class="stat-value">{{ rmse }}</div></div>
+      <div class="stat"><div class="stat-label">Direction accuracy</div><div class="stat-value">{{ direction_acc }}</div></div>
+    </div>
+ 
+    <div class="chart">{{ price_chart | safe }}</div>
+    <div class="chart">{{ change_chart | safe }}</div>
+  {% else %}
+    <p>No predictions yet. Wait a few seconds and the page will refresh by itself.</p>
+  {% endif %}
+ 
+  <p class="muted">Last updated: {{ updated_at or "not yet" }} &middot; updates every {{ refresh_seconds }} seconds</p>
+  <form method="post" action="/refresh">
+    <input type="hidden" name="model" value="{{ selected or 'lstm' }}">
+    <button type="submit">Refresh now</button>
+  </form>
+ 
+  <p class="muted">Prices are normalised (0-1 within each day). Educational project only, not financial advice.</p>
+</div>
+</body>
+</html>
