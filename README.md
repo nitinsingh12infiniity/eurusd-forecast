@@ -23,9 +23,9 @@ Validation results on the last 15% of the data (chronological split, no shufflin
  
 | Model | Direction accuracy | MAE | RMSE |
 |---|---|---|---|
-| LSTM | _fill in_ | _fill in_ | _fill in_ |
-| XGBoost | _fill in_ | _fill in_ | _fill in_ |
-| Ridge | _fill in_ | _fill in_ | _fill in_ |
+| LSTM | 55.94 | 0.0843 | 0.1419 |
+| XGBoost | 56.24 | 0.0921 | 0.1447 |
+| Ridge | 58.00 | 0.0895 | 0.1443 |
 | Naive baseline | n/a | _fill in_ | _fill in_ |
  
 Numbers come from `report_lstm.json`, `report_xgboost.json` and `report_ridge.json`. Yahoo only serves the last 60 days of 15-minute data, so results change a little each time the models are retrained. Judge direction accuracy against 50% (random guessing).
@@ -87,10 +87,6 @@ Run the tests with `pytest tests -v`.
 - Not a trading system: no spreads, fees, position sizing or risk management.
 - Predictions are on scaled prices (0-1 within each day), not real pips.
 - One train/validation split on one 60-day window, not a full statistical benchmark.
- 
-## Credits
- 
-Based on the idea of [EURUSD-lstm-dashboard](https://github.com/DebajyotiRay/EURUSD-lstm-dashboard) by Debajyoti Ray, rebuilt from scratch.
  
 ## Disclaimer
  
