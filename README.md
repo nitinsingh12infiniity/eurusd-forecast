@@ -2,7 +2,7 @@
  
 A web dashboard that predicts the direction of the next 15-minute EUR/USD candle using three different machine learning models, trained and tested on the same data so they can be compared fairly.
  
-**Live demo:** _add your Render link here after deployment_
+**Live demo:** https://eurusd-forecast.onrender.com
  
 ![Dashboard screenshot](docs/screenshot.png)
  
@@ -26,7 +26,7 @@ Validation results on the last 15% of the data (chronological split, no shufflin
 | LSTM | 55.94 | 0.0843 | 0.1419 |
 | XGBoost | 56.24 | 0.0921 | 0.1447 |
 | Ridge | 58.00 | 0.0895 | 0.1443 |
-| Naive baseline | n/a | _fill in_ | _fill in_ |
+| Naive baseline | n/a | _fill in_ | _fill in_ |  
  
 Numbers come from `report_lstm.json`, `report_xgboost.json` and `report_ridge.json`. Yahoo only serves the last 60 days of 15-minute data, so results change a little each time the models are retrained. Judge direction accuracy against 50% (random guessing).
  
